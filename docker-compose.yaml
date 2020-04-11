@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  unifi-reverse-dns:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: unifi-reverse-dns:latest   # Change this to use your prefered registry
+    container_name: unifi-reverse-dns
+    env_file:
+      - defaults.env
+    environment:
+      - DAEMONIZE=3600  # Run once an hour

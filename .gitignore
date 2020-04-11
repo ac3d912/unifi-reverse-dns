@@ -1,0 +1,8 @@
+# IDE
+.vscode/
+
+# 3rd Party
+ubiquiti/
+
+# Secrets
+*.secret

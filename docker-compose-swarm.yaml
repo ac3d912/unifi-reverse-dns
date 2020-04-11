@@ -1,0 +1,62 @@
+version: '3.3'
+services:
+  unifi-controller:
+    image: linuxserver/unifi-controller
+    container_name: unifi-controller
+    environment:
+      PUID: 1000
+      PGID: 1000
+      MEM_LIMIT: 1024M
+    volumes:
+      - unifi-data:/config
+    ports:
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 8080:8080
+      - 8081:8081
+      - 8443:8443
+      - 8843:8843
+      - 8880:8880
+      - 6789:6789
+      - 2223:22
+    networks:
+      - traefik-internal
+    restart: unless-stopped
+    deploy:
+      placement:
+        constraints:
+          - node.labels.unifi == true   # Place a node label called unifi and set it to true, or remove this
+      labels:
+        traefik.docker.network: "traefik-internal"
+        traefik.enable: "true"
+        traefik.frontend.entryPoints: "https"
+        traefik.frontend.rule: "Host:unifi.company.tld"
+        traefik.port: 8443
+        traefik.protocol: "https"
+        traefik.serversTransport.insecureSkipVerify: "true" # Don't verify traefik->unifi cert
+        traefik.tags: "traefik-internal"
+  unifi-reverse-dns:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: unifi-reverse-dns:latest   # Change this to use your prefered registry
+    container_name: unifi-reverse-dns
+    env_file:
+      - defaults.env
+    environment:
+      - BASE_URL=https://unifi-controller:8443/
+      - PASSWORD__FILE=/run/secrets/unifi-password
+      - DAEMONIZE=3600  # Run once an hour
+    secrets:
+      - unifi-password
+                    
+volumes:
+  unifi-data:
+  
+networks:
+  traefik-internal:
+    external: true
+
+secrets:
+  unifi-password:
+    external: true
