@@ -2,7 +2,11 @@
 
 Just a little tool to help Unifi users manage the aliases assigned to clients. Performs a reverse lookup of all clients attached to the AP and assigns an alias based upon the hostname returned.
 
-# Installation
+# Installation / Running
+
+Clone this repo, then follow the guidance in the following sub sections, based on your environment.
+
+    git clone https://github.com/ac3d912/unifi-reverse-dns.git
 
 ## Environment vars
 
@@ -54,3 +58,7 @@ I personally use and prefer this method because I already run a swarm on the int
 ## Troubleshooting
 
     docker service logs unifi-reverse-dns_unifi-reverse-dns
+
+# Scheduling Execution
+
+You can either use the --daemonize argument to the python script and background it, or schedule running the python script through something like crond, or add a systemd service. I suppose you could create a Windows Task to run it as well if you so desire.
