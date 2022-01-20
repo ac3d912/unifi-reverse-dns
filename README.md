@@ -18,8 +18,9 @@ You just need to clone the python API library I used. Maintainer did not include
 
     git clone git@github.com:frehov/Unifi-Python-API.git unifi-python-api
     
-    mv unifi-python-api/ubiquiti .
-    rm -rf unifi-python-api
+    cd unifi-reverse-dns
+    mv ../unifi-python-api/ubiquiti .
+    rm -rf ../unifi-python-api
 
     python main.py --help
 
